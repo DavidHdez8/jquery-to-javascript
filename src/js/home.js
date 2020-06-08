@@ -36,3 +36,24 @@ Promise.all([
   .catch(function(){
     console.error("Reject in promise");
   })
+
+$.ajax('https://randomuser.me/api/', {
+  method: 'GET',
+  success: function(data){
+    console.log(data);
+  },
+  error: function(error){
+    console.log(error);
+  }
+})  
+
+fetch('https://randomuser.me/api/')
+.then(function(response){
+  return response.json();
+})
+.then(function(user) {
+  console.log("User ", user.results[0].name.first, user.results[0].name.last);
+})
+.catch(function(){
+  console.log("Algo fallo :(")
+})
