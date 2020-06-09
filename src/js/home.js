@@ -56,4 +56,45 @@ fetch('https://randomuser.me/api/')
 })
 .catch(function(){
   console.log("Algo fallo :(")
-})
+});
+
+
+(async function load (){
+  try{
+    async function getData(url){
+      const response = await fetch(url);
+      const data = response.json();
+      return data;
+  }
+  const actionList = await getData('https://yts.mx/api/v2/list_movies.json?genre=action');
+  console.log(actionList);
+  }catch(error){
+    console.log(error);
+}
+})()
+
+
+const myPromise = new Promise(function(resolve, reject){
+  setTimeout(function(){
+    resolve();
+  }, 5000);
+});
+
+myPromise
+  .then(function(){
+    console.log("All resolved");
+  })
+  .catch(function(){
+    console.error("All reject. Error");
+  });
+
+(async function load(){
+  async function getData(link){
+    const response = await fetch(link);
+    const data = response.json();
+    console.log(data);
+  }
+
+  const list = await getData('https://yts.mx/api/v2/list_movies.json?genre=action');
+  console.log(list)
+})()
