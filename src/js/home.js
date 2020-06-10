@@ -58,43 +58,52 @@ fetch('https://randomuser.me/api/')
   console.log("Algo fallo :(")
 });
 
-
-(async function load (){
-  try{
-    async function getData(url){
-      const response = await fetch(url);
-      const data = response.json();
-      return data;
-  }
-  const actionList = await getData('https://yts.mx/api/v2/list_movies.json?genre=action');
-  console.log(actionList);
-  }catch(error){
-    console.log(error);
-}
-})()
-
-
-const myPromise = new Promise(function(resolve, reject){
-  setTimeout(function(){
-    resolve();
-  }, 5000);
-});
-
-myPromise
-  .then(function(){
-    console.log("All resolved");
-  })
-  .catch(function(){
-    console.error("All reject. Error");
-  });
-
 (async function load(){
-  async function getData(link){
-    const response = await fetch(link);
+  async function getData(url){
+    const response = await fetch(url);
     const data = response.json();
-    console.log(data);
+    return data;
   }
 
-  const list = await getData('https://yts.mx/api/v2/list_movies.json?genre=action');
-  console.log(list)
+  const actionList = await getData('https://yts.mx/api/v2/list_movies.json?genre=action');
+  const dramaList = await getData('https://yts.mx/api/v2/list_movies.json?genre=drama');
+  const animationList = await getData('https://yts.mx/api/v2/list_movies.json?genre=animation');
+  console.log(actionList, dramaList, animationList);
+
+  function videoItemTemplates (movie){
+    return(`<div class="primaryPlaylistItem">
+      <div class="primaryPlaylistItem-image">
+        <img src="${movie.medium_cover_image}">
+        </div>
+        <h4 class="primaryPlaylistItem-title">
+        ${movie.title}
+        </h4>
+    </div>`
+    );
+  }
+  const $actionContainer = document.querySelector('#action');
+  actionList.data.movies.forEach((movie) => {
+    const HTMLString = videoItemTemplates(movie);
+    const html = document.implementation.createHTMLDocument();
+    html.body.innerHTML = HTMLString;
+    $actionContainer.append(html.body.children[0]);
+    console.log(HTMLString);
+  });
 })()
+
+const $dramaContainer = document.getElementById('#drama');
+const $animationContainer = document.getElementById('#action');
+
+const $featuringContainer = document.getElementById('#featuring');
+const $form = document.getElementById('#form');
+const $home = document.getElementById('#home');
+
+const $modal = document.getElementById('modal');
+const $overlay = document.getElementById('overlay');
+const $hideModal = document.getElementById('hide-modal');
+
+const $modalTitle = $modal.querySelector('h1');
+const $modalImage = $modal.querySelector('img');
+const $modalDescription = $modal.querySelector('p');
+
+console.log(videoItemTemplates('src/images/covers/bitcoinjpg', 'Bitcoin'));
