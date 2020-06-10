@@ -82,6 +82,7 @@ fetch('https://randomuser.me/api/')
     );
   }
   const $actionContainer = document.querySelector('#action');
+  debugger
   actionList.data.movies.forEach((movie) => {
     const HTMLString = videoItemTemplates(movie);
     const html = document.implementation.createHTMLDocument();
