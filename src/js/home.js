@@ -81,19 +81,34 @@ fetch('https://randomuser.me/api/')
     </div>`
     );
   }
-  const $actionContainer = document.querySelector('#action');
-  debugger
-  actionList.data.movies.forEach((movie) => {
-    const HTMLString = videoItemTemplates(movie);
+  function createTemplate(HTMLString){
     const html = document.implementation.createHTMLDocument();
     html.body.innerHTML = HTMLString;
-    $actionContainer.append(html.body.children[0]);
-    console.log(HTMLString);
-  });
+    return html.body.children[0];
+  }
+
+  function renderMovieList (list, $container) {
+    // actionList.data.movies
+    $container.children[0].remove();
+    list.forEach((movie) => {
+      const HTMLString = videoItemTemplates(movie);
+      const movieElement = createTemplate(HTMLString);
+      $container.append(movieElement);
+      console.log(HTMLString);
+    } 
+    )
+  }
+
+  const $actionContainer = document.getElementById('action');
+  renderMovieList(actionList.data.movies, $actionContainer);
+
+  const $dramaContainer = document.getElementById('drama');
+  renderMovieList(dramaList.data.movies, $dramaContainer);
+
+  const $animationContainer = document.getElementById('animation');
+  renderMovieList(animationList.data.movies, $animationContainer);
 })()
 
-const $dramaContainer = document.getElementById('#drama');
-const $animationContainer = document.getElementById('#action');
 
 const $featuringContainer = document.getElementById('#featuring');
 const $form = document.getElementById('#form');
