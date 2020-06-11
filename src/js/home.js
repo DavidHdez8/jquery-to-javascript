@@ -65,6 +65,10 @@ fetch('https://randomuser.me/api/')
     return data;
   }
 
+  const $form = document.getElementById('form');
+  $form.addEventListener('submit', () => {
+    event.preventDefault();
+  })
   const actionList = await getData('https://yts.mx/api/v2/list_movies.json?genre=action');
   const dramaList = await getData('https://yts.mx/api/v2/list_movies.json?genre=drama');
   const animationList = await getData('https://yts.mx/api/v2/list_movies.json?genre=animation');
@@ -87,6 +91,12 @@ fetch('https://randomuser.me/api/')
     return html.body.children[0];
   }
 
+  function addEventClick($element){
+    $element.addEventListener('click', () => {
+      alert('AUCH!!');
+    });
+  }
+
   function renderMovieList (list, $container) {
     // actionList.data.movies
     $container.children[0].remove();
@@ -95,6 +105,7 @@ fetch('https://randomuser.me/api/')
       const movieElement = createTemplate(HTMLString);
       $container.append(movieElement);
       console.log(HTMLString);
+      addEventClick(movieElement);
     } 
     )
   }
@@ -121,5 +132,3 @@ const $hideModal = document.getElementById('hide-modal');
 const $modalTitle = $modal.querySelector('h1');
 const $modalImage = $modal.querySelector('img');
 const $modalDescription = $modal.querySelector('p');
-
-console.log(videoItemTemplates('src/images/covers/bitcoinjpg', 'Bitcoin'));
