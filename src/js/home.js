@@ -106,8 +106,12 @@ fetch('https://randomuser.me/api/')
     $featuringContainer.append($loader);
 
     const data = new FormData($form);
-    const peli = await getData(`${BASE_API}list_movies.json?limit=1&query_term=${data.get('name')}`); //Peticiones web
-    const HTMLString = featuringTemplate(peli.data.movies[0]);
+    const {
+      data: {
+        movies: pelis
+      }
+    } = await getData(`${BASE_API}list_movies.json?limit=1&query_term=${data.get('name')}`); //Peticiones web
+    const HTMLString = featuringTemplate(pelis[0]);
     $featuringContainer.innerHTML = HTMLString;
   })
   const actionList = await getData(`${BASE_API}list_movies.json?genre=action`);
@@ -115,8 +119,8 @@ fetch('https://randomuser.me/api/')
   const animationList = await getData(`${BASE_API}list_movies.json?genre=animation`);
   console.log(actionList, dramaList, animationList);
 
-  function videoItemTemplates (movie){
-    return(`<div class="primaryPlaylistItem">
+  function videoItemTemplates (movie, category){
+    return(`<div class="primaryPlaylistItem" data-id="${movie.id}" data-category=${category}>
       <div class="primaryPlaylistItem-image">
         <img src="${movie.medium_cover_image}">
         </div>
@@ -134,15 +138,14 @@ fetch('https://randomuser.me/api/')
 
   function addEventClick($element){
     $element.addEventListener('click', () => {
-      showModal();
+      showModal($element);
     });
   }
 
-  function renderMovieList (list, $container) {
-    // actionList.data.movies
+  function renderMovieList (list, $container, category) {
     $container.children[0].remove();
     list.forEach((movie) => {
-      const HTMLString = videoItemTemplates(movie);
+      const HTMLString = videoItemTemplates(movie, category);
       const movieElement = createTemplate(HTMLString);
       $container.append(movieElement);
       console.log(HTMLString);
@@ -152,13 +155,13 @@ fetch('https://randomuser.me/api/')
   }
 
   const $actionContainer = document.getElementById('action');
-  renderMovieList(actionList.data.movies, $actionContainer);
+  renderMovieList(actionList.data.movies, $actionContainer, 'action');
 
   const $dramaContainer = document.getElementById('drama');
-  renderMovieList(dramaList.data.movies, $dramaContainer);
+  renderMovieList(dramaList.data.movies, $dramaContainer, 'drama');
 
   const $animationContainer = document.getElementById('animation');
-  renderMovieList(animationList.data.movies, $animationContainer);
+  renderMovieList(animationList.data.movies, $animationContainer, 'animation');
 })()
 
 
@@ -172,9 +175,11 @@ const $modalTitle = $modal.querySelector('h1');
 const $modalImage = $modal.querySelector('img');
 const $modalDescription = $modal.querySelector('p');
 
-function showModal() {
+function showModal($element) {
   $overlay.classList.add('active');
   $modal.style.animation = 'modalIn .8s forwards';
+  const id = $element.dataset.id;
+  const category = $element.dataset.category;
 }
 
 $hideModal.addEventListener('click', () => {
