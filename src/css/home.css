@@ -26,6 +26,8 @@ body {
 .home-featuring {
   grid-area: featuring;
   display: grid;
+  width: 2050px;
+  height: 150px;
 }
 .home-featuring img {
   align-self: center;
